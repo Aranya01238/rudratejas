@@ -854,3 +854,6 @@ a:hover {
     .timeline-item:nth-child(odd)::before { right: 35px; }
     .timeline-item:nth-child(even)::before { left: 35px; }
 }
+.nav-item {
+    pointer-events: auto; /* Make sure clicking is allowed */
+  }
