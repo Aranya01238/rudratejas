@@ -811,8 +811,23 @@ a:hover {
     h3 { font-size: 1.5rem; }
 
     .main-header { padding: 15px 0; }
-    .main-nav { display: none; }
-
+    .main-nav { display: -moz-grid; }
+    .main-nav a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: var(--color-primary-neon);
+        box-shadow: 0 0 5px var(--color-primary-neon);
+        transition: width 0.3s ease-in-out;
+    }
+    
+    .main-nav a:hover::after {
+        width: 100%;
+    }
+    
     .hero { text-align: left; padding: 0 20px; }
     .hero-content { margin-left: 0; }
     .hero h1 { font-size: 3rem; }
