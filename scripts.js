@@ -1,20 +1,23 @@
-// scripts.js
-
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- Smooth Scroll for Navigation ---
     document.querySelectorAll('.main-nav a, .hero-actions a').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
+        anchor.addEventListener('click', function (e) {
             const targetId = this.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                const headerHeight = document.querySelector('.main-header').offsetHeight;
-                window.scrollTo({
-                    top: targetElement.offsetTop - headerHeight,
-                    behavior: 'smooth'
-                });
+
+            // Only smooth scroll if href starts with "#"
+            if (targetId.startsWith('#')) {
+                e.preventDefault();
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const headerHeight = document.querySelector('.main-header').offsetHeight;
+                    window.scrollTo({
+                        top: targetElement.offsetTop - headerHeight,
+                        behavior: 'smooth'
+                    });
+                }
             }
+            // Else: let the browser navigate normally to another HTML page
         });
     });
 
@@ -46,17 +49,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Specs "More Details" Toggle ---
     const toggleButton = document.getElementById('toggle-specs-btn');
     const moreSpecsContent = document.getElementById('more-specs');
-    toggleButton.addEventListener('click', () => {
-        const isExpanded = toggleButton.getAttribute('aria-expanded') === 'true' || false;
-        toggleButton.setAttribute('aria-expanded', !isExpanded);
-        moreSpecsContent.classList.toggle('expanded');
+    if (toggleButton && moreSpecsContent) {
+        toggleButton.addEventListener('click', () => {
+            const isExpanded = toggleButton.getAttribute('aria-expanded') === 'true' || false;
+            toggleButton.setAttribute('aria-expanded', !isExpanded);
+            moreSpecsContent.classList.toggle('expanded');
 
-        if (moreSpecsContent.classList.contains('expanded')) {
-            moreSpecsContent.style.maxHeight = moreSpecsContent.scrollHeight + 'px';
-        } else {
-            moreSpecsContent.style.maxHeight = '0';
-        }
-    });
+            if (moreSpecsContent.classList.contains('expanded')) {
+                moreSpecsContent.style.maxHeight = moreSpecsContent.scrollHeight + 'px';
+            } else {
+                moreSpecsContent.style.maxHeight = '0';
+            }
+        });
+    }
 
     // --- Gallery Lightbox Modal ---
     const galleryItems = document.querySelectorAll('.gallery-item');
@@ -96,12 +101,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    closeBtn.addEventListener('click', closeLightbox);
-    prevBtn.addEventListener('click', () => navigateLightbox(-1));
-    nextBtn.addEventListener('click', () => navigateLightbox(1));
+    if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
+    if (prevBtn) prevBtn.addEventListener('click', () => navigateLightbox(-1));
+    if (nextBtn) nextBtn.addEventListener('click', () => navigateLightbox(1));
 
     document.addEventListener('keydown', (e) => {
-        if (lightbox.classList.contains('visible')) {
+        if (lightbox && lightbox.classList.contains('visible')) {
             if (e.key === 'Escape') {
                 closeLightbox();
             } else if (e.key === 'ArrowLeft') {
@@ -113,11 +118,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Close lightbox when clicking outside the image
-    lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) {
-            closeLightbox();
-        }
-    });
+    if (lightbox) {
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+    }
 
     // --- Simple Contact Form Validation (Client-side) ---
     const contactForm = document.querySelector('.contact-form');
